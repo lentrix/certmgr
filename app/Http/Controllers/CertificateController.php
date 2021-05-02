@@ -28,21 +28,6 @@ class CertificateController extends Controller
             ->with('Info','A certificate has been issued for ' . $cert->recipient_id . '.');
     }
 
-    public function showCert(Certificate $cert) {
-        $pdf = \PDF::loadView('certificates.cert', compact('cert'));
-        $pdf->setPaper('a4','landscape');
-
-        return $pdf->stream("certificate.pdf");
-    }
-
-    public function downloadCert(Certificate $cert) {
-        $pdf = \PDF::loadView('certificates.cert', compact('cert'));
-        $pdf->setPaper('a4','landscape');
-
-        $filename = $cert->recipient_name . "_" . $cert->event->title . ".pdf";
-        return $pdf->download($filename);
-    }
-
     public function show(Certificate $cert) {
         return view('certificates.view', [
             'cert' => $cert

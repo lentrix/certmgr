@@ -1,25 +1,35 @@
 @extends('base')
 
 @section('heads')
+
     <style>
         .ratio-container {
             position: relative;
-            width: 90%;
-            padding-top: 70%;
-            background-color: #333;
-        }
-        iframe {
             width: 100%;
-            height: 100%;
+            padding-top: 70%;
+            background-color: #eee;
+        }
+        #myCanvas {
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
+        }
+        #template {
+            display: none;
+        }
+        #qrcode {
+            width: 130px;
+            float: right;
         }
     </style>
 @endsection
 
 @section('content')
 <br>
+
+<img src="{{asset(Storage::url($cert->event->template_path))}}" alt="template" id="template">
+<input type="hidden" id="name" value="{{$cert->recipient_name}}">
 
 <div class="row">
     <div class="col-md-4">
@@ -43,16 +53,55 @@
                 </td>
             </tr>
         </table>
-        <a href="{{url('/certificates/pdf/' . $cert->id . '/download')}}" class="btn btn-info btn-lg float-right">
-            <i class="fa fa-download"></i> Download Certificate
-        </a>
+
+        <img alt="qrcode" id="qrcode">
     </div>
     <div class="col-md-8">
         <h5>Certificate</h5>
         <div class="ratio-container">
-            <iframe src="{{url('/certificates/pdf/' . $cert->id)}}" frameborder="0"></iframe>
+
+            <canvas id="myCanvas" width="1000" height="700"></canvas>
+
         </div>
     </div>
 </div>
+
+@endsection
+
+
+@section('scripts')
+
+<script>
+    $(document).ready(function(){
+        var c = document.getElementById("myCanvas")
+        var ctx = c.getContext("2d")
+
+        ctx.moveTo(0,0)
+
+        var img = document.getElementById('template');
+        ctx.drawImage(img,0,0, 1000, 700)
+
+        var name = document.getElementById('name').value;
+
+        ctx.fillStyle='blue'
+        ctx.font="62px Bold Arial"
+        ctx.textAlign = "center"
+        ctx.fillText(name, 500, 350)
+        ctx.strokeStyle='#333377'
+        ctx.strokeText(name, 500, 350)
+
+        $("#qrcode").ClassyQR({
+            type: 'url',
+            url: 'http://certificates.psite7.org/verify/{{$cert->id}}'
+        });
+
+        setTimeout(function(){
+            var qrImg = document.getElementById("qrcode")
+            ctx.fillStyle = "black"
+            ctx.drawImage(qrImg,910,610,80,80)
+        }, 3000)
+
+    })
+</script>
 
 @endsection

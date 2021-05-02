@@ -1,5 +1,6 @@
 <?php
 
+use App\Certificate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/','SiteController@index');
 
 Route::post('/login', 'SiteController@login');
-
-Route::get('/certificates/pdf/{cert}/download', 'CertificateController@downloadCert');
-Route::get('/certificates/pdf/{cert}', 'CertificateController@showCert');
-
 
 Route::group(['middleware'=>['auth']], function() {
 
