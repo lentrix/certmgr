@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Certificate extends Model
 {
+    protected $dates = ['issued_at'];
+
     protected $fillable = [
         'event_id',
         'recipient_name',

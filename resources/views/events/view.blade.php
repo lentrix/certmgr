@@ -113,9 +113,13 @@
                     <tbody>
                         @foreach($event->certificates as $cert)
                         <tr>
-                            <td>{{$cert->recipient_name}}</td>
+                            <td>
+                                <a href="{{url('certificates/' . $cert->id)}}" style="text-decoration: none; font-weight:600">
+                                    {{$cert->recipient_name}}
+                                </a>
+                            </td>
                             <td>{{$cert->issuer->name}}</td>
-                            <td>{{$cert->issued_at}}</td>
+                            <td>{{$cert->issued_at->toFormattedDateString()}}</td>
                             <td>{{$cert->remarks}}</td>
                         </tr>
                         @endforeach

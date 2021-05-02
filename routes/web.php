@@ -17,6 +17,10 @@ Route::get('/','SiteController@index');
 
 Route::post('/login', 'SiteController@login');
 
+Route::get('/certificates/pdf/{cert}/download', 'CertificateController@downloadCert');
+Route::get('/certificates/pdf/{cert}', 'CertificateController@showCert');
+
+
 Route::group(['middleware'=>['auth']], function() {
 
     Route::get('/logout', 'SiteController@logout');
@@ -30,5 +34,6 @@ Route::group(['middleware'=>['auth']], function() {
     Route::get('/events', 'EventController@index');
 
     Route::post('/certificates/{event}', 'CertificateController@store');
+    Route::get('/certificates/{cert}', 'CertificateController@show');
 
 });
