@@ -5,7 +5,7 @@
 <h1>Dashboard</h1>
 
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-md-4">
         <div class="card" style="height: 250px">
             <div class="card-header bg-info text-white">
                 <h4>User Profile</h4>
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div class="col-sm-4">
+    <div class="col-md-4">
         <div class="card" style="height: 250px">
             <div class="card-header bg-success text-white">
                 <h4>
@@ -42,12 +42,12 @@
             <div class="card-body">
                 <a href="{{url('/events')}}" class="text-success" style="text-decoration: none">
                     <div style="font-size: 4.5em; text-align:center; font-weight:900">{{$eventCount}}</div>
-                    <div style="font-size: 2em; text-align:center; margin-top: -20px">Accomplished</div>
+                    <div style="font-size: 1.5em; text-align:center; margin-top: -20px">Accomplished</div>
                 </a>
             </div>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-md-4">
         <div class="card" style="height: 250px">
             <div class="card-header bg-primary text-white">
                 <h4>
@@ -60,7 +60,7 @@
             <div class="card-body">
                 <span class="text-primary">
                     <div style="font-size: 4.5em; text-align:center; font-weight:900">{{$certCount}}</div>
-                    <div style="font-size: 2em; text-align:center; margin-top: -20px">Certificates Issued</div>
+                    <div style="font-size: 1.5em; text-align:center; margin-top: -20px">Issued</div>
                 </span>
             </div>
         </div>

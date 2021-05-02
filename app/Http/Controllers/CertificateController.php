@@ -33,4 +33,38 @@ class CertificateController extends Controller
             'cert' => $cert
         ]);
     }
+
+    public function verify($certId) {
+        $cert = Certificate::find($certId);
+
+        if($cert) {
+            return redirect('/certificates/' . $certId);
+        }else {
+            return view('certificates.invalid', ['certNumber'=>$certId]);
+        }
+    }
+
+    public function preVerify() {
+        return view('certificates.preverify');
+    }
+
+    public function verifyCode(Request $request) {
+        $this->validate($request, ['code'=>'required']);
+
+        $cert = Certificate::find($request['code']);
+
+        if($cert) {
+            return view('certificates.view', compact('cert'));
+        }else {
+            return view('certificates.invalid', ['certNumber'=>$request['code']]);
+        }
+    }
+
+    public function update(Request $request, Certificate $cert) {
+        $this->validate($request, ['recipient_name'=>'required']);
+        $cert->update($request->all());
+
+        return redirect('/certificates/' . $cert->id)->with('Info','This certificate has been updated.');
+    }
+
 }

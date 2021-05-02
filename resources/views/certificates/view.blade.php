@@ -15,17 +15,56 @@
             left: 0;
             width: 100%;
         }
-        #template {
+        #template, #qrcode {
             display: none;
-        }
-        #qrcode {
-            width: 130px;
-            float: right;
         }
     </style>
 @endsection
 
 @section('content')
+
+<!-- Modal -->
+<div class="modal fade" id="editCertModal" tabindex="-1" aria-labelledby="editCertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCertModalLabel">Edit Certificate</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {!! Form::model($cert, ['url'=>'/certificates/' . $cert->id, 'method'=>'put']) !!}
+        <div class="modal-body">
+
+            <div class="form-group">
+                {!! Form::label('recipient_name', 'Name of Recipient') !!}
+                {!! Form::text('recipient_name', null, ['class'=>'form-control']) !!}
+            </div>
+            <div class="form-group">
+                {!! Form::label('recipient_designation', 'Designation') !!}
+                {!! Form::text('recipient_designation', null, ['class'=>'form-control']) !!}
+            </div>
+            <div class="form-group">
+                {!! Form::label('recipient_org', 'Organization') !!}
+                {!! Form::text('recipient_org', null, ['class'=>'form-control']) !!}
+            </div>
+            <div class="form-group">
+                {!! Form::label('remarks', 'Remarks') !!}
+                {!! Form::text('remarks', null, ['class'=>'form-control']) !!}
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">
+              <i class="fa fa-check"></i> Update Certificate
+          </button>
+        </div>
+        {!! Form::close() !!}
+      </div>
+    </div>
+</div>
+
 <br>
 
 <img src="{{asset(Storage::url($cert->event->template_path))}}" alt="template" id="template">
@@ -53,14 +92,22 @@
                 </td>
             </tr>
         </table>
-
+        {{-- <button class="btn btn-primary float-right" onclick="downloadCanvas('myCanvas','Certificate.png')">
+            <i class="fa fa-download"></i> Download Certificate
+        </button> --}}
         <img alt="qrcode" id="qrcode">
+        <button class="btn btn-primary"
+                type="button"
+                data-toggle="modal"
+                data-target="#editCertModal">
+            <i class="fa fa-edit"></i> Edit Certificate
+        </button>
     </div>
     <div class="col-md-8">
         <h5>Certificate</h5>
         <div class="ratio-container">
 
-            <canvas id="myCanvas" width="1000" height="700"></canvas>
+            <canvas id="myCanvas" name="Certificate" width="1000" height="700"></canvas>
 
         </div>
     </div>
@@ -72,34 +119,48 @@
 @section('scripts')
 
 <script>
+
+function downloadCanvas(canvasId, filename) {
+    link = document.createElement('a')
+    link.href = document.getElementById(canvasId).toDataURL();
+    link.download = filename;
+}
+
     $(document).ready(function(){
-        var c = document.getElementById("myCanvas")
-        var ctx = c.getContext("2d")
 
-        ctx.moveTo(0,0)
+        $('body').waitForImages({
+            waitForAll: true,
+            finished: function() {
+                var c = document.getElementById("myCanvas")
+                var ctx = c.getContext("2d")
 
-        var img = document.getElementById('template');
-        ctx.drawImage(img,0,0, 1000, 700)
+                ctx.moveTo(0,0)
 
-        var name = document.getElementById('name').value;
+                var img = document.getElementById('template');
+                ctx.drawImage(img,0,0, 1000, 700)
 
-        ctx.fillStyle='blue'
-        ctx.font="62px Bold Arial"
-        ctx.textAlign = "center"
-        ctx.fillText(name, 500, 350)
-        ctx.strokeStyle='#333377'
-        ctx.strokeText(name, 500, 350)
+                var name = document.getElementById('name').value;
 
-        $("#qrcode").ClassyQR({
-            type: 'url',
-            url: 'http://certificates.psite7.org/verify/{{$cert->id}}'
+                ctx.fillStyle='blue'
+                ctx.font="62px Bold Arial"
+                ctx.textAlign = "center"
+                ctx.fillText(name, 500, 350)
+                ctx.strokeStyle='#333377'
+                ctx.strokeText(name, 500, 350)
+
+                $("#qrcode").ClassyQR({
+                    type: 'url',
+                    url: 'http://certificates.psite7.org/verify/{{$cert->id}}'
+                })
+
+                setTimeout(function(){
+                    var qrImg = document.getElementById("qrcode")
+                    ctx.fillStyle = "black"
+                    ctx.drawImage(qrImg,910,610,80,80)
+                },2000)
+            }
         });
 
-        setTimeout(function(){
-            var qrImg = document.getElementById("qrcode")
-            ctx.fillStyle = "black"
-            ctx.drawImage(qrImg,910,610,80,80)
-        }, 3000)
 
     })
 </script>

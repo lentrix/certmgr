@@ -18,10 +18,16 @@
     border-radius: 5px;
     margin: 5px;
     padding: 10px;
+    height: 130px;
+}
+
+.event:hover {
+    background-color: #efefff;
 }
 
 .event img {
     width: 100px;
+    height: 70px;
 }
 
 .event-details {
