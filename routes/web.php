@@ -28,6 +28,7 @@ Route::group(['middleware'=>['auth']], function() {
 
     Route::get('/logout', 'SiteController@logout');
 
+    Route::put('/events/styles/{cert}', 'EventController@styles');
     Route::get('/events/create', 'EventController@create');
     Route::get('/events/{event}/update', 'EventController@edit');
     Route::put('/events/{event}/change-template', 'EventController@changeTemplate');
@@ -35,6 +36,7 @@ Route::group(['middleware'=>['auth']], function() {
     Route::put('/events/{event}', 'EventController@update');
     Route::post('/events', 'EventController@store');
     Route::get('/events', 'EventController@index');
+
 
     Route::post('/certificates/{event}', 'CertificateController@store');
     Route::put('/certificates/{cert}', 'CertificateController@update');

@@ -1,14 +1,17 @@
 @extends('base')
 
-@section('heads')
-    <script src="https://cdn.tiny.cloud/1/tmna0pou4z2h8mv3sxfv50znomp2v98jftozd7qv5o0xwz6w/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-@endsection
-
 @section('content')
 
 <br>
-<h1>Create Event</h1>
+
 {!! Form::open(['url'=>'/events', 'method'=>'post','enctype'=>'multipart/form-data']) !!}
+<h1>
+    <button class="btn btn-primary float-right mt-2" type="submit">
+        <i class="fa fa-save"></i> Create Event
+    </button>
+    Create Event
+</h1>
+
 <div class="row">
 
     <div class="col-md-5">
@@ -41,26 +44,40 @@
     </div>
     <div class="col-md-7">
         <div class="form-group">
-            {!! Form::label("details", 'Event Details') !!}
-            {!! Form::textarea('details', null, ['class'=>'form-control mytextarea','rows'=>'8']) !!}
+            {!! Form::label('font_family', "Font Family") !!}
+            {!! Form::select('font_family', [
+                "Cinzel"=>'Cinzel',
+                'Anton'=>'Anton',
+                'Lobster'=>'Lobster'
+            ],null, ['class'=>'form-control']) !!}
+        </div>
+
+        <div class="form-group">
+            {!! Form::label('font_color', "Font Color (HTML Hex)") !!}
+            {!! Form::text('font_color', '#222', ['class'=>'form-control']) !!}
+        </div>
+
+        <div class="form-group">
+            {!! Form::label('font_size', "Font Size (px)") !!}
+            {!! Form::text('font_size', '126', ['class'=>'form-control']) !!}
         </div>
         <div class="form-group">
-            <button class="btn btn-primary float-right" type="submit">
-                <i class="fa fa-save"></i> Create Event
-            </button>
+            {!! Form::label("details", 'Event Details') !!}
+            {!! Form::textarea('details', null, ['class'=>'form-control mytextarea','rows'=>'8']) !!}
         </div>
     </div>
 
 </div>
 {!! Form::close() !!}
+
+<hr>
+
 @endsection
 
 
 @section('scripts')
-<script type="text/javascript">
-    tinymce.init({
-      selector: '.mytextarea',
-      maxheight: 400
-    });
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+<script>
+CKEDITOR.replace( 'details' );
 </script>
 @endsection

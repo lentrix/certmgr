@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Certificate;
 use App\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -45,12 +46,6 @@ class EventController extends Controller
         $this->validate($request, [
             'title' => 'required'
         ]);
-
-        if($request->file('file')) {
-            $path = $request->file('file')->store('public/templates');
-            Storage::delete($event->template_path);
-            $request->request->add(['template_path', $path]);
-        }
 
         $event->update($request->all());
 

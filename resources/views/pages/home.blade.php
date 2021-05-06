@@ -51,9 +51,6 @@
         <div class="card" style="height: 250px">
             <div class="card-header bg-primary text-white">
                 <h4>
-                    <a href="{{url('/certificates/create')}}" class="btn btn-light btn-sm float-right">
-                        <i class="fa fa-plus"></i>
-                    </a>
                     Certificates
                 </h4>
             </div>

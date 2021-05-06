@@ -21,6 +21,9 @@ class CreateEventsTable extends Migration
             $table->string("person_incharge")->nullable();
             $table->bigInteger("created_by")->unsigned();
             $table->string('template_path')->nullable();
+            $table->string('font_family')->default('sans-serif');
+            $table->string('font_color')->default('#333');
+            $table->integer('font_size')->default(126);
             $table->timestamps();
             $table->foreign("created_by")->references('id')->on('users');
         });

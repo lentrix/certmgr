@@ -2,6 +2,15 @@
 
 @section('heads')
 
+    {{-- Load some google fonts --}}
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    {{-- font-family: 'Anton', sans-serif --}}
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    {{-- font-family: 'Lobster', cursive; --}}
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    {{-- font-family: 'Cinzel', serif; --}}
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         .ratio-container {
             position: relative;
@@ -75,7 +84,17 @@
         <h5>Certificate Details</h5>
         <table class="table table-striped">
             <tr>
-                <th>Event Title</th><td>{{$cert->event->title}}</td>
+                <th>Event Title</th>
+                <td>
+                    {{$event->title}}
+                    @if(!auth()->guest())
+                    <a href="{{url('/events/' . $event->id)}}"
+                            class="btn btn-success btn-sm"
+                            title="Go to event">
+                        <i class="fa fa-calendar-check"></i>
+                    </a>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <th>Issued on</th><td>{{$cert->issued_at->toFormattedDateString()}}</td>
@@ -100,14 +119,30 @@
                 type="button"
                 data-toggle="modal"
                 data-target="#editCertModal">
-            <i class="fa fa-edit"></i> Edit Certificate
+            <i class="fa fa-edit"></i> Edit Details
         </button>
+        <br><br>
+        <div class="alert alert-warning">
+            Notice: Sometimes due to load timing, the resulting certificate
+            will not be rendered with its proper font and/or the QR Code
+            will not be drawn. In such case, you may click on the 'Redraw'
+            button when the browser stops loading to generate the proper
+            certificate.
+            <p class="text-center">
+                <button class="btn btn-success" type="button" onClick="drawCert()">
+                    <i class="fa fa-recycle"></i> Redraw
+                </button>
+            </p>
+
+        </div>
+        <br>
+
     </div>
     <div class="col-md-8">
         <h5>Certificate</h5>
         <div class="ratio-container">
 
-            <canvas id="myCanvas" name="Certificate" width="1000" height="700"></canvas>
+            <canvas id="myCanvas" name="Certificate" width="2000" height="1400"></canvas>
 
         </div>
     </div>
@@ -126,42 +161,39 @@ function downloadCanvas(canvasId, filename) {
     link.download = filename;
 }
 
+function drawCert() {
+    var c = document.getElementById("myCanvas")
+    var ctx = c.getContext("2d")
+
+    ctx.moveTo(0,0)
+
+    var img = document.getElementById('template');
+    ctx.drawImage(img,0,0, 2000, 1400)
+
+    var name = document.getElementById('name').value;
+
+    $("#qrcode").ClassyQR({
+        type: 'url',
+        url: 'http://certificates.psite7.org/verify/{{$cert->id}}'
+    })
+
+    setTimeout(function(){
+        ctx.fillStyle='{{$event->font_color}}'
+        ctx.font="{{$fontText}}"
+        ctx.textAlign = "center"
+        ctx.fillText(name, 1000, 700)
+        var qrImg = document.getElementById("qrcode")
+        ctx.fillStyle = "black"
+        ctx.drawImage(qrImg,1820,1220,160,160)
+    },3000)
+}
+
     $(document).ready(function(){
 
         $('body').waitForImages({
             waitForAll: true,
-            finished: function() {
-                var c = document.getElementById("myCanvas")
-                var ctx = c.getContext("2d")
-
-                ctx.moveTo(0,0)
-
-                var img = document.getElementById('template');
-                ctx.drawImage(img,0,0, 1000, 700)
-
-                var name = document.getElementById('name').value;
-
-                ctx.fillStyle='blue'
-                ctx.font="62px Bold Arial"
-                ctx.textAlign = "center"
-                ctx.fillText(name, 500, 350)
-                ctx.strokeStyle='#333377'
-                ctx.strokeText(name, 500, 350)
-
-                $("#qrcode").ClassyQR({
-                    type: 'url',
-                    url: 'http://certificates.psite7.org/verify/{{$cert->id}}'
-                })
-
-                setTimeout(function(){
-                    var qrImg = document.getElementById("qrcode")
-                    ctx.fillStyle = "black"
-                    ctx.drawImage(qrImg,910,610,80,80)
-                },2000)
-            }
+            finished: drawCert()
         });
-
-
     })
 </script>
 

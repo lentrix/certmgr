@@ -29,8 +29,11 @@ class CertificateController extends Controller
     }
 
     public function show(Certificate $cert) {
+        $event = Event::find($cert->event_id);
         return view('certificates.view', [
-            'cert' => $cert
+            'cert' => $cert,
+            'event'=> $event,
+            'fontText' => "Bold {$event->font_size}px $event->font_family"
         ]);
     }
 
@@ -54,7 +57,13 @@ class CertificateController extends Controller
         $cert = Certificate::find($request['code']);
 
         if($cert) {
-            return view('certificates.view', compact('cert'));
+            $event = Event::find($cert->event_id);
+
+            return view('certificates.view', [
+                'cert' => $cert,
+                'event' => $event,
+                'fontText' => "Bold {$event->font_size}px $event->font_family"
+            ]);
         }else {
             return view('certificates.invalid', ['certNumber'=>$request['code']]);
         }

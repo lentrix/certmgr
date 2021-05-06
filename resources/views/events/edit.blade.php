@@ -1,12 +1,16 @@
 @extends('base')
 
-@section('heads')
-    <script src="https://cdn.tiny.cloud/1/tmna0pou4z2h8mv3sxfv50znomp2v98jftozd7qv5o0xwz6w/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-@endsection
-
 @section('content')
 
-<h1>Edit Event</h1>
+<h1>
+    Edit Event
+
+    <a href="{{url('/events/' . $event->id)}}"
+                class="btn btn-success float-right mt-2">
+        Go Back
+    </a>
+
+</h1>
 
 {!! Form::model($event, ['url'=>'/events/' . $event->id, 'method'=>'put','enctype'=>'multipart/form-data']) !!}
 <div class="row">
@@ -29,9 +33,22 @@
         </div>
 
         <div class="form-group">
-            <a href="{{url('/events/' . $event->id)}}" class="btn btn-success">
-                Go Back
-            </a>
+            {!! Form::label('font_family', "Font Family") !!}
+            {!! Form::select('font_family', [
+                "Cinzel"=>'Cinzel',
+                'Anton'=>'Anton',
+                'Lobster'=>'Lobster'
+            ],null, ['class'=>'form-control']) !!}
+        </div>
+
+        <div class="form-group">
+            {!! Form::label('font_color', "Font Color (HTML Hex)") !!}
+            {!! Form::text('font_color', null, ['class'=>'form-control']) !!}
+        </div>
+
+        <div class="form-group">
+            {!! Form::label('font_size', "Font Size (px)") !!}
+            {!! Form::text('font_size', null, ['class'=>'form-control']) !!}
         </div>
 
     </div>
@@ -53,10 +70,8 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript">
-    tinymce.init({
-      selector: '.mytextarea',
-      maxheight: 400
-    });
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+<script>
+CKEDITOR.replace( 'details' );
 </script>
 @endsection

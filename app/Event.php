@@ -12,7 +12,10 @@ class Event extends Model
         'tags',
         'person_incharge',
         'created_by',
-        'template_path'
+        'template_path',
+        'font_family',
+        'font_color',
+        'font_size'
     ];
 
     public function createdBy() {
