@@ -4,8 +4,6 @@
 
 @include('events._issue-modal')
 
-@include('events._delete-cert-modal')
-
 <br>
 
 <div class="row">
@@ -67,9 +65,8 @@
                     <thead>
                         <tr>
                             <th>Recipient</th>
-                            <th>Issued</th>
-                            <th>Remarks</th>
-                            <th> </th>
+                            <th>Issued by</th>
+                            <th>Issued on</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,18 +78,11 @@
                                 </a>
                             </td>
                             <td>
-                                by {{$cert->issuer->name}} <br>
-                                on {{$cert->issued_at->toFormattedDateString()}}
+                                {{$cert->issuer->name}}
+                            <td>
+                                {{$cert->issued_at->toFormattedDateString()}}
                             </td>
                             <td>{{$cert->remarks}}</td>
-                            <td class='text-right'>
-                                <button class="btn btn-danger btn-sm delete-btn"
-                                        title='Delete certificate'
-                                        data-cert="{{$cert->id}}"
-                                        data-recipient="{{$cert->recipient_name}}">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -102,19 +92,4 @@
     </div>
 </div>
 
-@endsection
-
-
-@section('scripts')
-    <script>
-        $(document).ready(function(){
-            $(".delete-btn").click(function(){
-                var name = $(this).data('recipient')
-                var id = $(this).data('cert')
-                $("#recipient").text(name)
-                $("#cert_id").val(id)
-                $("#deleteCertModal").modal('show')
-            })
-        })
-    </script>
 @endsection

@@ -11,8 +11,8 @@
         {!! Form::open(['url'=>'/certificates', 'method'=>'delete']) !!}
         <div class="modal-body">
           Are you sure you want to delete the certificate issued for
-          <span id="recipient" style="font-weight: 700"></span>?
-          {!! Form::hidden('cert_id', null,['id'=>'cert_id']) !!}
+          <span id="recipient" style="font-weight: 700">{{$cert->recipient_name}}</span>?
+          {!! Form::hidden('cert_id', $cert->id) !!}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

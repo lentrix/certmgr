@@ -32,6 +32,10 @@
 
 @section('content')
 
+@if(!auth()->guest())
+    @include('certificates._delete-cert-modal')
+@endif
+
 <!-- Modal -->
 <div class="modal fade" id="editCertModal" tabindex="-1" aria-labelledby="editCertModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -80,6 +84,18 @@
 <input type="hidden" id="name" value="{{$cert->recipient_name}}">
 
 <div class="row">
+    <div class="col">
+        @if(!auth()->guest())
+        <a href="{{url('/events/' . $event->id)}}"
+                class="btn btn-success float-right"
+                title="Go to event">
+            <i class="fa fa-calendar-check"></i> Back to Events
+        </a>
+        @endif
+    </div>
+</div>
+
+<div class="row">
     <div class="col-md-4">
         <h5>Certificate Details</h5>
         <table class="table table-striped">
@@ -87,13 +103,6 @@
                 <th>Event Title</th>
                 <td>
                     {{$event->title}}
-                    @if(!auth()->guest())
-                    <a href="{{url('/events/' . $event->id)}}"
-                            class="btn btn-success btn-sm"
-                            title="Go to event">
-                        <i class="fa fa-calendar-check"></i>
-                    </a>
-                    @endif
                 </td>
             </tr>
             <tr>
@@ -115,13 +124,22 @@
             <i class="fa fa-download"></i> Download Certificate
         </button> --}}
         <img alt="qrcode" id="qrcode">
+        @if(!auth()->guest())
         <button class="btn btn-primary"
                 type="button"
                 data-toggle="modal"
                 data-target="#editCertModal">
             <i class="fa fa-edit"></i> Edit Details
         </button>
+
+        <button class="btn btn-danger"
+                type="button"
+                data-toggle="modal"
+                data-target="#deleteCertModal" >
+            <i class="fa fa-trash"></i> Delete Certificate
+        </button>
         <br><br>
+        @endif
         <div class="alert alert-warning">
             Notice: Sometimes due to load timing, the resulting certificate
             will not be rendered with its proper font and/or the QR Code
