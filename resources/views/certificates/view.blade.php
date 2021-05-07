@@ -139,7 +139,7 @@
 
     </div>
     <div class="col-md-8">
-        <h5>Certificate</h5>
+        <h5>Generated Certificate</h5>
         <div class="ratio-container">
 
             <canvas id="myCanvas" name="Certificate" width="2000" height="1400"></canvas>

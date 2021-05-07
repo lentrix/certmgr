@@ -40,5 +40,6 @@ Route::group(['middleware'=>['auth']], function() {
 
     Route::post('/certificates/{event}', 'CertificateController@store');
     Route::put('/certificates/{cert}', 'CertificateController@update');
+    Route::delete('/certificates', 'CertificateController@delete');
 
 });

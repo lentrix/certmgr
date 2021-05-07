@@ -14,12 +14,12 @@ class CreateEventsTable extends Migration
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id')->unsigned()->autoIncrement();
             $table->string("title");
             $table->text("details")->nullable();
             $table->string("tags")->nullable();
             $table->string("person_incharge")->nullable();
-            $table->bigInteger("created_by")->unsigned();
+            $table->integer("created_by")->unsigned();
             $table->string('template_path')->nullable();
             $table->string('font_family')->default('sans-serif');
             $table->string('font_color')->default('#333');

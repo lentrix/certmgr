@@ -76,4 +76,16 @@ class CertificateController extends Controller
         return redirect('/certificates/' . $cert->id)->with('Info','This certificate has been updated.');
     }
 
+    public function delete(Request $request) {
+        $this->validate($request,['cert_id'=>'required']);
+        $cert = Certificate::find($request['cert_id']);
+
+        if($cert) {
+            $cert->delete();
+            return redirect()->back()->with('Info','A certificate has been deleted.');
+        }
+
+        return redirect()->back()->with('Error','Certificate ID not found.');
+    }
+
 }

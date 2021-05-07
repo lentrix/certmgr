@@ -2,47 +2,9 @@
 
 @section('content')
 
-<!-- Modal -->
-<div class="modal fade" id="issueCertModal" tabindex="-1" aria-labelledby="issueCertModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="issueCertModalLabel">Issuance of Certificate</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        {!! Form::open(['url'=>'/certificates/' . $event->id, 'method'=>'post']) !!}
-        <div class="modal-body">
+@include('events._issue-modal')
 
-            <div class="form-group">
-                {!! Form::label('recipient_name', 'Name of Recipient') !!}
-                {!! Form::text('recipient_name', null, ['class'=>'form-control']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('recipient_designation', 'Designation') !!}
-                {!! Form::text('recipient_designation', null, ['class'=>'form-control']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('recipient_org', 'Organization') !!}
-                {!! Form::text('recipient_org', null, ['class'=>'form-control']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('remarks', 'Remarks') !!}
-                {!! Form::text('remarks', null, ['class'=>'form-control']) !!}
-            </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">
-              <i class="fa fa-check"></i> Issue Certificate
-          </button>
-        </div>
-        {!! Form::close() !!}
-      </div>
-    </div>
-</div>
+@include('events._delete-cert-modal')
 
 <br>
 
@@ -101,13 +63,13 @@
                 </h4>
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
                             <th>Recipient</th>
-                            <th>Issued by</th>
-                            <th>Issued on</th>
+                            <th>Issued</th>
                             <th>Remarks</th>
+                            <th> </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -118,9 +80,19 @@
                                     {{$cert->recipient_name}}
                                 </a>
                             </td>
-                            <td>{{$cert->issuer->name}}</td>
-                            <td>{{$cert->issued_at->toFormattedDateString()}}</td>
+                            <td>
+                                by {{$cert->issuer->name}} <br>
+                                on {{$cert->issued_at->toFormattedDateString()}}
+                            </td>
                             <td>{{$cert->remarks}}</td>
+                            <td class='text-right'>
+                                <button class="btn btn-danger btn-sm delete-btn"
+                                        title='Delete certificate'
+                                        data-cert="{{$cert->id}}"
+                                        data-recipient="{{$cert->recipient_name}}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -130,4 +102,19 @@
     </div>
 </div>
 
+@endsection
+
+
+@section('scripts')
+    <script>
+        $(document).ready(function(){
+            $(".delete-btn").click(function(){
+                var name = $(this).data('recipient')
+                var id = $(this).data('cert')
+                $("#recipient").text(name)
+                $("#cert_id").val(id)
+                $("#deleteCertModal").modal('show')
+            })
+        })
+    </script>
 @endsection
